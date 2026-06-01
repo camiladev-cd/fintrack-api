@@ -1,6 +1,7 @@
 package com.fintrack.fintrack_api.service;
 
 import com.fintrack.fintrack_api.dto.AccountRequest;
+import com.fintrack.fintrack_api.exception.ResourceNotFoundException;
 import com.fintrack.fintrack_api.model.Account;
 import com.fintrack.fintrack_api.model.User;
 import com.fintrack.fintrack_api.repository.AccountRepository;
@@ -35,7 +36,8 @@ public class AccountService {
 
     public Account getAccountById(Long id) {
         return accountRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Account not found with id: " + id));
     }
 
     public void deleteAccount(Long id) {
@@ -46,6 +48,7 @@ public class AccountService {
         String email = SecurityContextHolder.getContext()
                 .getAuthentication().getName();
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User not found"));
     }
 }

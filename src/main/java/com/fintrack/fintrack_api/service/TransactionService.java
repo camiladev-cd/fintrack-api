@@ -1,6 +1,7 @@
 package com.fintrack.fintrack_api.service;
 
 import com.fintrack.fintrack_api.dto.TransactionRequest;
+import com.fintrack.fintrack_api.exception.ResourceNotFoundException;
 import com.fintrack.fintrack_api.model.Account;
 import com.fintrack.fintrack_api.model.Transaction;
 import com.fintrack.fintrack_api.model.TransactionType;
@@ -21,7 +22,8 @@ public class TransactionService {
     @Transactional
     public Transaction createTransaction(TransactionRequest request) {
         Account account = accountRepository.findById(request.getAccountId())
-                .orElseThrow(() -> new RuntimeException("Account not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Account not found with id: " + request.getAccountId()));
 
         Transaction transaction = Transaction.builder()
                 .amount(request.getAmount())

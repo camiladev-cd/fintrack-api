@@ -3,6 +3,7 @@ package com.fintrack.fintrack_api.service;
 import com.fintrack.fintrack_api.dto.AuthResponse;
 import com.fintrack.fintrack_api.dto.LoginRequest;
 import com.fintrack.fintrack_api.dto.RegisterRequest;
+import com.fintrack.fintrack_api.exception.EmailAlreadyExistsException;
 import com.fintrack.fintrack_api.model.User;
 import com.fintrack.fintrack_api.repository.UserRepository;
 import com.fintrack.fintrack_api.security.JwtService;
@@ -23,7 +24,7 @@ public class AuthService {
 
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already registered");
+            throw new EmailAlreadyExistsException("Email already registered: " + request.getEmail());
         }
         User user = User.builder()
                 .name(request.getName())
